@@ -2,7 +2,7 @@
 	import { beforeUpdate, createEventDispatcher, onMount } from 'svelte';
 	import Fuse from 'fuse.js';
 
-	import Paginate from './Paginate.svelte';
+	import Paginate from './paginate.svelte';
 	import { debounce } from './debounce';
 	import * as local from './local';
 	import { collect, exportExcel, print } from './data-grid';
@@ -236,7 +236,7 @@
 			{#if printable}
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
-				on:click="{() => print(columns, rows)}">
+				on:click="{print}">
 				<i class="material-icons">print</i>
 			</a>
 			{/if}
@@ -244,7 +244,8 @@
 			<a href="#!"
 				class="waves-effect btn-flat nopadding"
 				v-if="this.exportable"
-				on:click="{() => exportExcel(columns, rows, title)}">
+				on:click="{(e) => { exportExcel(rows, columns); 
+    e.preventDefault(); } }">
 				<i class="material-icons">description</i>
 			</a>
 			{/if}
@@ -288,7 +289,7 @@
         </thead>
 
         <tbody>
-            {#each $paginated.paginatedRows as row, y}
+        	{#each $paginated.rows as row, y}
                 <tr class="{ clickable ? 'clickable' : '' }" on:click="{() => click(row)}">
                     {#each columns as column, x}
                         <td>
@@ -303,6 +304,7 @@
             {/each}
         </tbody>
     </table>
+
 {#if paginate}
 	<div class="table-footer">
 		<div class="datatable-length">

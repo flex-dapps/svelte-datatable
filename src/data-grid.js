@@ -8,10 +8,14 @@ function dig(obj, selector) {
         result = result[splitter[i]];
     }
 
+    console.log("dig result", result);
     return result;
 }
 
 export function collect(obj, field) {
+    console.log(JSON.stringify(obj))
+    console.log(field)
+    console.log(typeof field)
     if (typeof(field) === 'function')
         return field(obj);
     else if (typeof(field) === 'string')
@@ -20,30 +24,37 @@ export function collect(obj, field) {
         return undefined;
 }
 
-export function exportExcel(columns, rows, title) {
+export function exportExcel(rows, columns) {
+    console.log("exportExcel");
     const mimeType = 'data:application/vnd.ms-excel';
-    const html = renderTable(columns, rows).replace(/ /g, '%20');
-
-    const documentPrefix = title != '' ? title.replace(/ /g, '-') : 'Sheet'
+    const html = renderTable(rows, columns).replace(/ /g, '%20');
+    console.log("table rendered");
+    const documentPrefix = 'Maple'
     const d = new Date();
 
     var dummy = document.createElement('a');
-    dummy.href = mimeType + ', ' + html;
+    dummy.href = mimeType + ',' + html;
     dummy.download = documentPrefix
         + '-' + d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate()
         + '-' + d.getHours() + '-' + d.getMinutes() + '-' + d.getSeconds()
         +'.xls';
+
+    dummy.target = '_blank';
+    console.log("dummy", dummy);
     dummy.click();
+    console.log("clicked");
 }
 
-export function print(columns, rows) {
+export function print() {
     let win = window.open("");
-    win.document.write(renderTable(columns, rows));
+    win.document.write(renderTable(this));
     win.print();
     win.close();
 }
 
-function renderTable(columns, rows) {
+function renderTable(rows, columns) {
+    console.log("rows", rows);
+    console.log("columns", columns);
     let table = '<table><thead>';
 
     table += '<tr>';
