@@ -1,8 +1,20 @@
-# svelte datatable
+# Svelte Datatable
+
+## Contents
+
+[Information](#information)
+[Features](#features)
+[Requirements](#requirements)
+[Installation](#installation)
+[Basic Usage](#basic-usage)
+[Advanced Usage](#advanced-usage)
+
+
+## Information
 
 This project was created by the [Svelte REPL](https://svelte.technology/repl).
 
-Data Table component was converted to Svelte from [MicroDroid/vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable) project. 
+Data Table component was converted to Svelte from [MicroDroid/vue-materialize-datatable](https://github.com/MicroDroid/vue-materialize-datatable) project.
 
 Paginate component was converted to Svelte from [https://github.com/lokyoung/vuejs-paginate](https://github.com/lokyoung/vuejs-paginate) project.
 
@@ -23,55 +35,47 @@ Paginate component was converted to Svelte from [https://github.com/lokyoung/vue
  - [`materialize-css`](https://www.npmjs.com/package/materialize-css) (and **NOT** any other MD library!)
  - Svelte
 
-## Get started
-
-You will need to have [Node.js](https://nodejs.org) installed.
-
-Install the dependencies...
-
+## Installation
 ```bash
-cd /path/to/this/directory
-npm install
+yarn add svelte-datatable
+# or
+npm i svelte-datatable
 ```
 
-...then start Rollup:
+There are currently some known issues with dependencies, so if you run into any problems, install `svelte-datatable` from this git repository with:
 
 ```bash
-npm run dev
+yarn add svelte-datatable@https://github.com/Kiho/svelte-datatable.git
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+## Basic Usage
 
+```javascript
+<script>
+import { DataTable } from 'svelte-datatable'
 
-## Deploying to the web
+// define some columns
+let columns = [{
+  label: "ID",    // "Pretty" column name
+  field: "id",    // Field name from row object
+  numeric: true,  // Affects sorting
+  html: false     // Escapes output if false.
+}, ..., ];
 
-### With [now](https://zeit.co/now)
+// define some rows of data
+let rows = [{
+  id: 'SomeValue' // This will match the column above and print a value in it
+}, ..., ]
+</script>
 
-Install `now` if you haven't already:
+<!-- Import the materialize css/js here -->
 
-```bash
-npm install -g now
+<DataTable
+  {columns}
+  {rows}
+/>
 ```
 
-Then, from within your project folder:
+## Advanced Usage
 
-```bash
-now
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public
-```
+This section is under construction - the best place to look for clues about advanced usage for this library is the `src/DataTable.svelte` file, which has a lot of `export let` statements. They should give you an idea about which props are available and what you can use them for.
