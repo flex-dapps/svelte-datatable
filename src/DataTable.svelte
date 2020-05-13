@@ -12,6 +12,7 @@
   export let title = "";
   export let customButtons = [];
   export let clickable = true;
+  export let rowDeletion = false;
   export let printable = true;
   export let exportable = true;
   export let searchable = true;
@@ -21,7 +22,6 @@
 
   export let sortable = true;
   export let sortColumn = -1;
-  export let sortIndex = -1;
   export let sortType = "asc";
 
   export let currentPerPage = 10;
@@ -89,7 +89,6 @@
     if (options.indexOf(defaultPerPage) > -1) {
       currentPerPage = parseInt(defaultPerPage);
     }
-    console.log("currentPerPage", currentPerPage, options);
     (currentPerPage = currentPerPage), (perPageOptions = options);
   }
 
@@ -147,7 +146,6 @@
       rows,
       paginatedRows
     } = values);
-    console.log("values", values);
     update(paginatedRows, currentPerPage, selectedPage);
   }
 
@@ -156,7 +154,6 @@
     if (getList && (!pred || pred(paginate))) {
       const p = Object.assign({}, paginate, props);
       getList(p).then(data => {
-        console.log("getPagedServer ", data);
         cb(data);
       });
     }
@@ -178,7 +175,6 @@
   }
 
   function getPaged(props, pred) {
-    console.log("props", props);
     if (isServerProcess) {
       getPagedServer(props, pred, { paginate, getList }, updatePaged);
     } else {
@@ -202,6 +198,10 @@
       _rows.push(rows[rowIndex]);
     }
     return _rows;
+  }
+
+  function deleteRow(index) {
+    dispatch("delete", index);
   }
 
   $: selectedPage = selected + 1;
@@ -293,10 +293,6 @@
     min-width: 36px;
     padding: 0 8px;
   }
-  .table-header input {
-    margin: 0;
-    height: auto;
-  }
   .table-header i {
     color: rgba(0, 0, 0, 0.54);
     font-size: 24px;
@@ -337,51 +333,12 @@
     -webkit-justify-content: center;
     justify-content: center;
   }
-  .table-footer .select-wrapper {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    /* works with row or column */
-
-    flex-direction: row;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-  }
   .table-footer .datatable-info,
   .table-footer .datatable-length {
     margin-right: 32px;
   }
-  .table-footer .material-pagination {
-    display: flex;
-    -webkit-display: flex;
-    margin: 0;
-  }
-  .table-footer .material-pagination li {
-    color: rgba(0, 0, 0, 0.54);
-    padding: 0 2px;
-    font-size: 15px;
-  }
-  .table-footer .material-pagination li a {
-    color: rgba(0, 0, 0, 0.54);
-    padding: 0 6px;
-    font-size: 15px;
-  }
-  .table-footer .material-pagination li a.nopadding {
-    padding: 0;
-  }
   .table-footer :global(a) {
     max-height: 30px;
-  }
-  .table-footer .select-wrapper input.select-dropdown {
-    margin: 0;
-    border-bottom: none;
-    height: auto;
-    line-height: normal;
-    font-size: 13px;
-    width: 40px;
-    text-align: right;
   }
   .table-footer select {
     background-color: transparent;
@@ -409,9 +366,6 @@
   table td,
   table th {
     border-radius: 0;
-  }
-  table tr td a {
-    color: inherit;
   }
   table tr td a i {
     font-size: 18px;
@@ -575,6 +529,17 @@
                 id={y}
                 on:click={() => selectForExport(y)} />
             </td>
+          {/if}
+          {#if rowDeletion}
+            <a
+              href="#!"
+              class="waves-effect btn-flat nopadding"
+              on:click={e => {
+                deleteRow(y);
+                e.preventDefault();
+              }}>
+              <i class="material-icons">delete</i>
+            </a>
           {/if}
         </tr>
       {/each}
