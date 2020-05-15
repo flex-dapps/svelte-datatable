@@ -276,7 +276,7 @@
   }
   .table-header {
     height: 64px;
-    padding-left: 24px;
+    /* padding-left: 24px; */
     padding-right: 14px;
     -webkit-align-items: center;
     -ms-flex-align: center;
@@ -299,7 +299,7 @@
   }
   .table-footer {
     height: 56px;
-    padding-left: 24px;
+    /* padding-left: 24px; */
     padding-right: 14px;
     display: -webkit-flex;
     display: flex;
@@ -354,7 +354,7 @@
     color: #000;
   }
   table tr td {
-    padding: 0 0 0 56px;
+    /* padding: 0 0 0 56px; */
     height: 48px;
     font-size: 13px;
     color: rgba(0, 0, 0, 0.87);
@@ -382,7 +382,7 @@
     white-space: nowrap;
     padding: 0;
     height: 56px;
-    padding-left: 56px;
+    /* padding-left: 56px; */
     vertical-align: middle;
     outline: none !important;
     overflow: hidden;
