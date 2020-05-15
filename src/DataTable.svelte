@@ -531,15 +531,17 @@
             </td>
           {/if}
           {#if rowDeletion}
-            <a
-              href="#!"
-              class="waves-effect btn-flat nopadding"
-              on:click={e => {
-                deleteRow(y);
-                e.preventDefault();
-              }}>
-              <i class="material-icons">delete</i>
-            </a>
+            <td>
+              <a
+                href="#!"
+                class="waves-effect btn-flat nopadding"
+                on:click={e => {
+                  deleteRow(y);
+                  e.preventDefault();
+                }}>
+                <i class="material-icons">delete</i>
+              </a>
+            </td>
           {/if}
         </tr>
       {/each}
