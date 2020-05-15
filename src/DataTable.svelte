@@ -531,7 +531,7 @@
             </td>
           {/if}
           {#if rowDeletion}
-            <td>
+            <td class="datatable-row-delete">
               <a
                 href="#!"
                 class="waves-effect btn-flat nopadding"
