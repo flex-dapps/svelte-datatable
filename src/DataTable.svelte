@@ -42,12 +42,16 @@
   // local
   export let rows = [];
   export let paginatedRows = [];
+
   // server
   export let paged = { paginate: paginate };
   export let getList = null;
 
   const dispatch = createEventDispatcher();
-  const isServerProcess = process === "server";
+  // const isServerProcess = process === "server";
+
+  let isServerProcess = false;
+  console.log({ isServerProcess });
 
   const paginated = immerStore({
     paginatedRows,
@@ -60,7 +64,10 @@
   export function search(e) {
     searching = !searching;
     if (searching) {
-      setTimeout(() => searchInputRef.focus(), 100);
+      setTimeout(() => {
+        console.log({ searching, searchInputRef });
+        searchInputRef.focus();
+      }, 100);
     }
   }
 
@@ -113,6 +120,7 @@
 
   onMount(() => {
     setPerPageOptions();
+    searchInput = "";
   });
 
   function getPagedLocal(props, pred) {
@@ -175,6 +183,7 @@
   }
 
   function getPaged(props, pred) {
+    console.log({ isServerProcess });
     if (isServerProcess) {
       getPagedServer(props, pred, { paginate, getList }, updatePaged);
     } else {
@@ -209,7 +218,7 @@
   function update(paginatedRows, size, page) {
     paginated.update($paginated => {
       $paginated.paginatedRows = paginatedRows;
-      $paginated.rows = rows;
+      $paginated.rows = paginatedRows; // i don't know if this is correct
       $paginated.size = size;
       $paginated.page = page;
     });
@@ -217,7 +226,12 @@
   }
 
   $: {
-    // console.log('$paginated - previous - selectedPage ', $paginated.page, previous ? previous.page : -1, selectedPage);
+    // console.log(
+    //   "$paginated - previous - selectedPage ",
+    //   $paginated.page,
+    //   previous ? previous.page : -1,
+    //   selectedPage
+    // );
     if (previous) {
       if (!isServerProcess && rows !== previous.rows) {
         getPaged({ rows });
@@ -245,7 +259,6 @@
     if (searchInput != prevSearchInput) {
       debounce(() => {
         if (searchInput != prevSearchInput) {
-          console.log("searchInput changed", searchInput);
           getPaged({ searchText: searchInput });
           prevSearchInput = searchInput;
         }
@@ -471,16 +484,16 @@
         </a>
       {/if}
       {#if searchable}
-        <a href="#!" class="waves-effect btn-flat nopadding" on:click={search}>
+        <div class="waves-effect btn-flat nopadding" on:click={search}>
           <i class="material-icons">search</i>
-        </a>
+        </div>
       {/if}
     </div>
   </div>
   {#if searching}
     <div>
       <div id="search-input-container">
-        <label>
+        <label class="w-100 flex justify-end">
           <input
             type="search"
             id="search-input"
