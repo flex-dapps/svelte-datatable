@@ -17,6 +17,7 @@
   export let exportable = true;
   export let searchable = true;
   export let searching = false;
+  export let header = true;
   export let searchInputRef = null;
   export let searchInput = "";
 
@@ -447,10 +448,13 @@
   table td:first-child {
     padding-left: 24px;
   }
+  .hidden {
+    display: none;
+  }
 </style>
 
 <div class="material-table">
-  <div class="table-header">
+  <div class="table-header" class:hidden={!header}>
     <span class="table-title">{title}</span>
     <div class="actions">
       {#each customButtons as button, x}
